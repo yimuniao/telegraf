@@ -63,6 +63,12 @@ func (a *Agent) Run(ctx context.Context) error {
 		return err
 	}
 
+	log.Printf("D! [agent] Starting service processors")
+	err = a.startServiceProcessors(ctx)
+	if err != nil {
+		return err
+	}
+
 	var wg sync.WaitGroup
 
 	src := inputC
@@ -703,6 +709,27 @@ func (a *Agent) startServiceInputs(
 		}
 	}
 
+	return nil
+}
+
+func (a *Agent) startServiceProcessors(ctx context.Context) error {
+	started := []telegraf.ServiceProcessor{}
+	for _, processor := range a.Config.Processors {
+		if sp, ok := processor.Processor.(telegraf.ServiceProcessor); ok {
+			err := sp.Start()
+			if err != nil {
+				log.Printf("E! [agent] Service for processor %s failed to start: %v",
+					processor.Name, err)
+
+				for _, sp := range started {
+					sp.Stop()
+				}
+
+				return err
+			}
+			started = append(started, sp)
+		}
+	}
 	return nil
 }
 

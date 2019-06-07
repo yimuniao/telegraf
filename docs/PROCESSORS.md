@@ -64,6 +64,14 @@ func init() {
 }
 ```
 
+### Service Processor Plugins
+
+Similar to the [telegraf.ServiceInput][] plugin, a Service Processor allows
+a background service to be created. This is useful when the processor needs
+information than what is available in the metric.
+
+To create a Service Processor implement the [telegraf.ServiceProcessor][] interface.
+
 [SampleConfig]: https://github.com/influxdata/telegraf/wiki/SampleConfig
 [CodeStyle]: https://github.com/influxdata/telegraf/wiki/CodeStyle
 [telegraf.Processor]: https://godoc.org/github.com/influxdata/telegraf#Processor
