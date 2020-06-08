@@ -1,61 +1,76 @@
-# Contributing Guidelines
+### Contributing
 
-Thank you for your interest in contributing to our project. Whether it's a bug report, new feature, correction, or additional
-documentation, we greatly value feedback and contributions from our community.
+1. [Sign the CLA][cla].
+1. Open a [new issue][] to discuss the changes you would like to make.  This is
+   not strictly required but it may help reduce the amount of rework you need
+   to do later.
+1. Make changes or write plugin using the guidelines in the following
+   documents:
+   - [Input Plugins][inputs]
+   - [Processor Plugins][processors]
+   - [Aggregator Plugins][aggregators]
+   - [Output Plugins][outputs]
+1. Ensure you have added proper unit tests and documentation.
+1. Open a new [pull request][].
 
-Please read through this document before submitting any issues or pull requests to ensure we have all the necessary
-information to effectively respond to your bug report or contribution.
+#### Contributing an External Plugin *(experimental)*
+Input plugins written for internal Telegraf can be run as externally-compiled plugins through the [Execd Input Plugin](https://github.com/influxdata/telegraf/tree/master/plugins/inputs/execd) without having to change the plugin code.
+
+Follow the guidelines of how to integrate your plugin with the [Execd Go Shim](https://github.com/influxdata/telegraf/tree/master/plugins/inputs/execd/shim) to easily compile it as a separate app and run it from the inputs.execd plugin. 
+
+#### Security Vulnerability Reporting
+InfluxData takes security and our users' trust very seriously. If you believe you have found a security issue in any of our
+open source projects, please responsibly disclose it by contacting security@influxdata.com. More details about 
+security vulnerability reporting, 
+including our GPG key, [can be found here](https://www.influxdata.com/how-to-report-security-vulnerabilities/).
+
+### GoDoc
+
+Public interfaces for inputs, outputs, processors, aggregators, metrics,
+and the accumulator can be found in the GoDoc:
+
+[![GoDoc](https://godoc.org/github.com/influxdata/telegraf?status.svg)](https://godoc.org/github.com/influxdata/telegraf)
+
+### Common development tasks
+
+**Adding a dependency:**
+
+Telegraf uses Go modules. Assuming you can already build the project, run this in the telegraf directory:
+
+1. `go get github.com/[dependency]/[new-package]`
+
+**Unit Tests:**
+
+Before opening a pull request you should run the linter checks and
+the short tests.
+
+```
+make check
+make test
+```
+
+**Execute integration tests:**
+
+(Optional)
+
+Running the integration tests requires several docker containers to be
+running.  You can start the containers with:
+```
+docker-compose up
+```
+
+And run the full test suite with:
+```
+make test-all
+```
+
+Use `make docker-kill` to stop the containers.
 
 
-## Reporting Bugs/Feature Requests
-
-We welcome you to use the GitHub issue tracker to report bugs or suggest features.
-
-When filing an issue, please check existing open, or recently closed, issues to make sure somebody else hasn't already
-reported the issue. Please try to include as much information as you can. Details like these are incredibly useful:
-
-* A reproducible test case or series of steps
-* The version of our code being used
-* Any modifications you've made relevant to the bug
-* Anything unusual about your environment or deployment
-
-
-## Contributing via Pull Requests
-Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
-
-1. You are working against the latest source on the *master* branch.
-2. You check existing open, and recently merged, pull requests to make sure someone else hasn't addressed the problem already.
-3. You open an issue to discuss any significant work - we would hate for your time to be wasted.
-
-To send us a pull request, please:
-
-1. Fork the repository.
-2. Modify the source; please focus on the specific change you are contributing. If you also reformat all the code, it will be hard for us to focus on your change.
-3. Ensure local tests pass.
-4. Commit to your fork using clear commit messages.
-5. Send us a pull request, answering any default questions in the pull request interface.
-6. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
-
-GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and
-[creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
-
-
-## Finding contributions to work on
-Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels (enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any 'help wanted' issues is a great place to start.
-
-
-## Code of Conduct
-This project has adopted the [Amazon Open Source Code of Conduct](https://aws.github.io/code-of-conduct).
-For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact
-opensource-codeofconduct@amazon.com with any additional questions or comments.
-
-
-## Security issue notifications
-If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public github issue.
-
-
-## Licensing
-
-See the [LICENSE](LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
-
-We may ask you to sign a [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) for larger changes.
+[cla]: https://www.influxdata.com/legal/cla/
+[new issue]: https://github.com/influxdata/telegraf/issues/new/choose
+[pull request]: https://github.com/influxdata/telegraf/compare
+[inputs]: /docs/INPUTS.md
+[processors]: /docs/PROCESSORS.md
+[aggregators]: /docs/AGGREGATORS.md
+[outputs]: /docs/OUTPUTS.md
