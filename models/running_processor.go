@@ -71,6 +71,16 @@ func (r *RunningProcessor) Init() error {
 	return nil
 }
 
+func (r *RunningProcessor) Stop() error {
+	if p, ok := r.Processor.(telegraf.Stopper); ok {
+		err := p.Stop()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (rp *RunningProcessor) Apply(in ...telegraf.Metric) []telegraf.Metric {
 	rp.Lock()
 	defer rp.Unlock()

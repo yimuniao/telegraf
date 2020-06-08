@@ -9,6 +9,13 @@ type Initializer interface {
 	Init() error
 }
 
+// Stopper is an interface that plugin types:
+// Processors, and Aggregators can optionally implement to release the resources the plugins are using
+type Stopper interface {
+	// Stop performs one time resources release of the processor and aggregator plugins
+	Stop() error
+}
+
 // Logger defines an interface for logging.
 type Logger interface {
 	// Errorf logs an error message, patterned after log.Printf.

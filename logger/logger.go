@@ -46,12 +46,13 @@ type LoggerCreator interface {
 
 var loggerRegistry map[string]LoggerCreator
 
-func registerLogger(name string, loggerCreator LoggerCreator) {
+func RegisterLogger(name string, loggerCreator LoggerCreator) {
 	if loggerRegistry == nil {
 		loggerRegistry = make(map[string]LoggerCreator)
 	}
 	loggerRegistry[name] = loggerCreator
 }
+
 
 type telegrafLog struct {
 	writer         io.Writer
@@ -83,7 +84,7 @@ func (t *telegrafLog) Close() error {
 }
 
 // newTelegrafWriter returns a logging-wrapped writer.
-func newTelegrafWriter(w io.Writer) io.Writer {
+func NewTelegrafWriter(w io.Writer) io.Writer {
 	return &telegrafLog{
 		writer:         wlog.NewWriter(w),
 		internalWriter: w,
@@ -120,7 +121,7 @@ func (t *telegrafLogCreator) CreateLogger(config LogConfig) (io.Writer, error) {
 		writer = defaultWriter
 	}
 
-	return newTelegrafWriter(writer), nil
+	return NewTelegrafWriter(writer), nil
 }
 
 // Keep track what is actually set as a log output, because log package doesn't provide a getter.
@@ -157,7 +158,7 @@ func newLogWriter(config LogConfig) io.Writer {
 
 func init() {
 	tlc := &telegrafLogCreator{}
-	registerLogger("", tlc)
-	registerLogger(LogTargetStderr, tlc)
-	registerLogger(LogTargetFile, tlc)
+	RegisterLogger("", tlc)
+	RegisterLogger(LogTargetStderr, tlc)
+	RegisterLogger(LogTargetFile, tlc)
 }

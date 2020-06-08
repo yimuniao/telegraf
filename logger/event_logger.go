@@ -45,5 +45,5 @@ func (e *eventLoggerCreator) CreateLogger(config LogConfig) (io.Writer, error) {
 }
 
 func RegisterEventLogger(serviceLogger service.Logger) {
-	registerLogger(LogTargetEventlog, &eventLoggerCreator{serviceLogger: serviceLogger})
+	RegisterLogger(LogTargetEventlog, &eventLoggerCreator{serviceLogger: serviceLogger})
 }

@@ -99,6 +99,7 @@ func (a *Agent) Run(ctx context.Context) error {
 				log.Printf("E! [agent] Error running processors: %v", err)
 			}
 			close(dst)
+			a.stopProcessors()
 			log.Printf("D! [agent] Processor channel closed")
 		}(src, dst)
 
@@ -117,6 +118,7 @@ func (a *Agent) Run(ctx context.Context) error {
 				log.Printf("E! [agent] Error running aggregators: %v", err)
 			}
 			close(dst)
+			a.stopAggregators()
 			log.Printf("D! [agent] Output channel closed")
 		}(src, dst)
 
@@ -630,6 +632,28 @@ func (a *Agent) initPlugins() error {
 		}
 	}
 	return nil
+}
+
+// stopAggregators runs the Stop function on Aggregator plugins.
+func (a *Agent) stopAggregators() {
+	for _, aggregator := range a.Config.Aggregators {
+		err := aggregator.Stop()
+		if err != nil {
+			log.Printf("E! [agent] Error stopping aggregator %s: %v",
+				aggregator.Config.Name, err)
+		}
+	}
+}
+
+// stopProcessors runs the Stop function on Processors plugins.
+func (a *Agent) stopProcessors() {
+	for _, processor := range a.Config.Processors {
+		err := processor.Stop()
+		if err != nil {
+			log.Printf("E! [agent] Error stopping processor %s: %v",
+				processor.Config.Name, err)
+		}
+	}
 }
 
 // connectOutputs connects to all outputs.
