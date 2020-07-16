@@ -1,17 +1,4 @@
-## My Project
-
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
-* Write in your license below and create a LICENSE file
-
-## License
-
-This library is licensed under the LICENSE NAME HERE License.
-
+*This is a fork of [telegraf](https://github.com/influxdata/telegraf/) project*
 # Telegraf [![Circle CI](https://circleci.com/gh/influxdata/telegraf.svg?style=svg)](https://circleci.com/gh/influxdata/telegraf) [![Docker pulls](https://img.shields.io/docker/pulls/library/telegraf.svg)](https://hub.docker.com/_/telegraf/)
 
 Telegraf is an agent for collecting, processing, aggregating, and writing metrics.
