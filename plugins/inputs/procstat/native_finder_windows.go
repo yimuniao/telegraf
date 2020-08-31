@@ -33,10 +33,10 @@ func (pg *NativeFinder) Pattern(pattern string) ([]PID, error) {
 	return pids, err
 }
 
-var patternCache map[string]*Regexp
+var patternCache map[string]*regexp.Regexp
 var pcmut sync.RWMutex
 
-func likeToRegexp(p string) (*Regexp, err) {
+func likeToRegexp(p string) (*regexp.Regexp, error) {
 	pcmut.RLock()
 	re, ok := patternCache[p]
 	pcmut.RUnlock()
@@ -44,7 +44,7 @@ func likeToRegexp(p string) (*Regexp, err) {
 		return re, nil
 	}
 
-	pattern = like2regexp.WMILikeToRegexp(p)
+	pattern := like2regexp.WMILikeToRegexp(p)
 	re, err := regexp.Compile(pattern)
 	if err != nil {
 		return nil, err
