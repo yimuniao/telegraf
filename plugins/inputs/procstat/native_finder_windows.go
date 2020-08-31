@@ -2,6 +2,7 @@ package procstat
 
 import (
 	"regexp"
+	"sync"
 
 	"github.com/influxdata/telegraf/plugins/inputs/procstat/like2regexp"
 	"github.com/shirou/gopsutil/process"
@@ -32,12 +33,33 @@ func (pg *NativeFinder) Pattern(pattern string) ([]PID, error) {
 	return pids, err
 }
 
+var patternCache map[string]*Regexp
+var pcmut sync.RWMutex
+
+func likeToRegexp(p string) (*Regexp, err) {
+	pcmut.RLock()
+	re, ok := patternCache[p]
+	pcmut.RUnlock()
+	if ok {
+		return re, nil
+	}
+
+	pattern = like2regexp.WMILikeToRegexp(p)
+	re, err := regexp.Compile(pattern)
+	if err != nil {
+		return nil, err
+	}
+	pcmut.Lock()
+	patternCache[p] = re
+	pcmut.Unlock()
+	return re, nil
+}
+
 //FullPattern matches on the command line when the process was executed
 func (pg *NativeFinder) FullPattern(pattern string) ([]PID, error) {
 	var pids []PID
 
-	pattern = like2regexp.WMILikeToRegexp(pattern)
-	regxPattern, err := regexp.Compile(pattern)
+	regxPattern, err := likeToRegexp(pattern)
 	if err != nil {
 		return pids, err
 	}
