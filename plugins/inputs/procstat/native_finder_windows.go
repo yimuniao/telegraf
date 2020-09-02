@@ -33,7 +33,7 @@ func (pg *NativeFinder) Pattern(pattern string) ([]PID, error) {
 	return pids, err
 }
 
-var patternCache map[string]*regexp.Regexp
+var patternCache = make(map[string]*regexp.Regexp)
 var pcmut sync.RWMutex
 
 func likeToRegexp(p string) (*regexp.Regexp, error) {
