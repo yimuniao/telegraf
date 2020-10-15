@@ -48,7 +48,6 @@ require (
 	github.com/ghodss/yaml v1.0.1-0.20190212211648-25d852aebe32
 	github.com/glinton/ping v0.1.4-0.20200311211934-5ac87da8cd96
 	github.com/go-logfmt/logfmt v0.4.0
-	github.com/go-ole/go-ole v1.2.1 // indirect
 	github.com/go-redis/redis v6.12.0+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/goburrow/modbus v0.1.0
@@ -152,3 +151,6 @@ require (
 
 // replaced due to https://github.com/satori/go.uuid/issues/73
 replace github.com/satori/go.uuid => github.com/gofrs/uuid v3.2.0+incompatible
+
+// replace gopsutil with local copy with LVM related change for temorory fix
+replace github.com/shirou/gopsutil => ./patches/gopsutil
